@@ -1,0 +1,42 @@
+﻿@{
+    Layout = null;
+}
+
+@using MVC_AJAX_INTRO.DATA.Model_Entity;
+
+@model List<Customer>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <!--Css Libraries-->
+    <link href="~/Assets/Content/bootstrap.css" rel="stylesheet" />
+    <!--Js Libraries-->
+    <script src="~/Assets/Scripts/jquery-3.0.0.js"></script>
+    <script src="~/Assets/Scripts/bootstrap.js"></script>
+    <!--------------->
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <div class="form" style="padding: 20px">
+        <button class="btn btn-light" id="btnGetCustomers">Get All Customers</button>
+        <br />
+        <ul class="list-group" style="width: 300px"></ul>
+        <script>
+            $('#btnGetCustomers').click(function () {
+                $('li').remove();       // Refresh every button click.
+                $.ajax({
+                    url: "/Customer/GetAllCustomer",
+                    method: "GET",
+                    success: function (data) {
+                        $.each(data, function (i, item) {
+                            $('ul').append('<li class="list-group-item">' + item.name + '</li>')
+                        })
+                    }
+                })
+            })
+        </script>
+    </div>
+</body>
+</html>

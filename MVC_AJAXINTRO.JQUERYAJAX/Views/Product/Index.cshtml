@@ -1,0 +1,81 @@
+﻿@{
+    Layout = null;
+}
+
+@using MVC_AJAX_INTRO.DATA.Model_Entity;
+
+@model List<Product>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <!--Css Libraries-->
+    <link href="~/Assets/Content/bootstrap.css" rel="stylesheet" />
+    <!--Js Libraries-->
+    <script src="~/Assets/Scripts/jquery-3.0.0.js"></script>
+    <script src="~/Assets/Scripts/bootstrap.js"></script>
+    <!--------------->
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <div class="form-group">
+        @foreach (Product item in Model)
+        {
+            <button class="btn btn-light" id="@item.ProductID" data-target="#modalDetail" data-toggle="modal">
+                Show Details of @item.ProductName
+            </button>
+            <br />
+        }
+        <script>
+            $('button').click(function () {
+                var capturedId = $(this).attr('id')
+                $.ajax({
+                    url: "/Product/GetProductDetail/" + capturedId,
+                    method: "GET",
+                    success: function (data) {
+                        $('#lblName').text(data.name)
+                        $('#lblPrice').text(data.price)
+                        $('#lblStock').text(data.stockquantity)
+                    },
+                    error: function () {
+                        alert("The operation could not be executed.")
+                    }
+                })
+            })
+        </script>
+    </div>
+
+    <div id="modalDetail" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Product Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body clearfix">
+                    <div class="form row">
+                        <label class="col-sm-2">Name: </label>
+                        <div class="col-sm-auto" id="lblName"></div>
+                    </div>
+                    <div class="form row">
+                        <label class="col-sm-2">Price: </label>
+                        <div class="col-sm-auto" id="lblPrice"></div>
+                    </div>
+                    <div class="form row">
+                        <label class="col-sm-2">Stock: </label>
+                        <div class="col-sm-auto" id="lblStock"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
